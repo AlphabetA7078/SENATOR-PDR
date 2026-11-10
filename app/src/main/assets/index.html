@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SENATOR-PDR</title>
+<style>
+body{font-family:Tahoma;background:#111827;color:white;margin:0;padding:16px}
+h2{text-align:center;color:#fbbf24}
+.box{background:#1f2937;padding:16px;border-radius:14px;margin:12px 0}
+label{display:block;margin-top:13px}
+input,select,button{width:100%;box-sizing:border-box;padding:12px;margin-top:7px;border-radius:8px;border:0;font-size:15px}
+button{background:#fbbf24;font-weight:bold;margin-top:18px}
+.result{color:#34d399;font-size:20px;font-weight:bold}
+img{max-width:100%;margin-top:10px;border-radius:10px}
+</style>
+</head>
+<body>
+<h2>⚒️ SENATOR-PDR ⚒️</h2>
+<div class="box">
+<label>خودرو</label>
+<input id="car" placeholder="مثلاً پراید">
+<label>قطعه آسیب‌دیده</label>
+<input id="part" placeholder="مثلاً درب جلو">
+<label>قیمت خودرو (تومان)</label>
+<input id="carPrice" type="number">
+<label>قیمت قطعه (تومان)</label>
+<input id="partPrice" type="number">
+<label>اجرت تعویض قطعه (تومان)</label>
+<input id="replaceFee" type="number">
+<label>افت قیمت خودرو (تومان)</label>
+<input id="depreciation" type="number">
+<label>شدت آسیب</label>
+<select id="severity">
+<option value="0.005">جزئی - ۰/۵ درصد</option>
+<option value="0.01">کم - ۱ درصد</option>
+<option value="0.015">زیاد - ۱/۵ درصد</option>
+<option value="0.02">خیلی زیاد - ۲ درصد</option>
+</select>
+<label>روش تعمیر</label>
+<select id="method">
+<option value="pdr">صافکاری بی‌رنگ PDR</option>
+<option value="paint">صافکاری با رنگ</option>
+<option value="replace">تعویض قطعه</option>
+</select>
+<label>انتخاب عکس خودرو</label>
+<input type="file" id="photo" accept="image/*">
+<img id="preview" style="display:none">
+<button onclick="calculate()">محاسبه اجرت</button>
+</div>
+<div class="box">
+<h3>نتیجه محاسبه</h3>
+<div id="result" class="result">هنوز محاسبه‌ای انجام نشده</div>
+</div>
+<script>
+const money=n=>Math.round(n).toLocaleString('fa-IR')+' تومان';
+document.getElementById('photo').onchange=e=>{
+const f=e.target.files[0];
+if(f){
+const img=document.getElementById('preview');
+img.src=URL.createObjectURL(f);
+img.style.display='block';
+}
+};
+function calculate(){
+const car=Number(document.getElementById('carPrice').value)||0;
+const part=Number(document.getElementById('partPrice').value)||0;
+const fee=Number(document.getElementById('replaceFee').value)||0;
+const dep=Number(document.getElementById('depreciation').value)||0;
+const rate=Number(document.getElementById('severity').value);
+const method=document.getElementById('method').value;
+let total;
+if(method==='pdr') total=(car+part+fee+dep)*rate;
+else if(method==='paint') total=(car+part+fee+dep)*rate/2;
+else total=part+fee;
+document.getElementById('result').textContent=money(total);
+}
+</script>
+</body>
+</html>
